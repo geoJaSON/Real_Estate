@@ -22,9 +22,11 @@ targetfields = ['HCAD_NUM', 'Market_Area_1', 'Market_Area_1_Dscr',
        'jurs']
 
 
+count = int(arcpy.GetCount_management(targetdata).getOutput(0))
+
 # Create update cursor for feature class
 with arcpy.da.UpdateCursor(targetdata, targetfields,"land_val is null") as cursor:
-    for row in tqdm(cursor):
+    for row in tqdm(cursor, total=count):
         try:
             df = ra_df.loc[row[0]]
             row[1]=df['Market_Area_1']
